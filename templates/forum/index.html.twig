@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ForumController!{% endblock %}
+
+{% block body %}
+
+<section class="article">
+
+{% for post in posts %}
+
+
+<article>
+    <h2>{{  post.titre }}</h2>
+    <div class="metadata">  </div>
+    <div class="content">
+       
+        {{ post.content | raw }}
+        <br>
+        <a href="{{ path('forum_show',{'id': post.id})}}" class="btn btn-primary">Accéder au forum</a>
+    </div>
+{% endfor %}
+</article>
+
+{% endblock %}

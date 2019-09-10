@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+
+ {% block body %}
+
+    <h2>connexion</h2>
+    <br>
+    <form action="{{ path('forum_login')}}" method="post">
+
+     <div class="form-group">
+    <input placeholder="username.." required name="_username"
+    type="text" class="form-control">
+     </div>
+     <div class="form-group">
+    <input type="password" placeholder="mot de passe.." required name="_password"
+     class="form-control">
+     </div>
+ <div class="form-group">
+    <button type="submit" class= "btn btn-success">connexion</button>
+     </div>
+    </form>
+
+
+  
+  <a href="{{ path('forum_registration')}}"> Inscrivez-vous ici! </a>
+ {% endblock %}
+
+

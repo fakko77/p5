@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+
+ {% block body %}
+
+    <h2>Creation de topic</h2>
+
+    
+ {{form_start(formNew)}}
+
+{{ form_row(formNew.titre , {'attr' : {'placeholder':"titre"}} )}}
+{{ form_row(formNew.content , {'attr' : {'placeholder':"content"}} )}}
+
+
+<button type="sumbit" class="btn btn-success">Envoyer! </button>
+
+ {{form_end(formNew)}}
+
+ {% endblock %}
+
+
