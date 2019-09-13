@@ -5,7 +5,7 @@
 
 <article>
     <h2>{{ post.titre }}</h2>
-    <div class="metadata">date</div>
+    <div class="metadata">date {{ post.DatePost | date('d/m/y') }} à {{post.DatePost | date('h:i') }} dans la catégorie {{post.category.title }}</div>
     <div class="content">
         <img src="http://placehold.it/350x150" alt="">
         <p>Pariatur possimus hic maiores officia, placeat facere tempore suscipit. Nisi dicta magnam voluptatem eveniet dolorum.</p>
