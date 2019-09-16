@@ -5,10 +5,14 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Post;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType ;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
 class ForumController extends AbstractController
@@ -54,6 +58,12 @@ class ForumController extends AbstractController
         $form = $this ->createFormBuilder($post)
                       ->add('titre')
                       ->add('content',TextareaType::class)
+                      ->add('category',EntityType::class , [
+                         
+                            'class' => Category::class,
+
+                        'choice_label' => 'title'
+                      ])
                       ->getForm();
                       
                       $form->handleRequest($request);
@@ -63,6 +73,8 @@ class ForumController extends AbstractController
               
                           $post->setDatePost(new \DateTime());
                         $post->setUserCreator("avoir avec mentor");
+                        
+                        
                          $manager->persist($post);
                           $manager->flush();
 
