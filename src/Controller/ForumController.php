@@ -57,7 +57,7 @@ class ForumController extends AbstractController
 
         $form = $this ->createFormBuilder($post)
                       ->add('titre')
-                      ->add('content',TextareaType::class)
+                      ->add('content',TextareaType::class , array ('attr' => array ('class' => 'ckeditor')) )
                       ->add('category',EntityType::class , [
                          
                             'class' => Category::class,
