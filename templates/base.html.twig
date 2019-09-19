@@ -49,6 +49,15 @@
 <div class="container">
         {% block body %}{% endblock %}
 </div>
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+        <script src="{{ asset('bundles/javascript/ckeditor/adapters/jquery.js') }}"></script>
+        <script src="{{ asset('bundles/javascript/ckeditor/ckeditor.js') }}"></script>
+<script type="text/javascript">
+    $(function() {
+        $('textarea.ckeditor').ckeditor();
+    });
+</script>
+        
+        {% endblock %}
     </body>
 </html>
