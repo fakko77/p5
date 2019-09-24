@@ -1,12 +1,14 @@
 <?php
 
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
@@ -36,20 +38,28 @@ class Users implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-   
     private $Pwd;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $DateInscription;
+    private $date_inscription;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Email()
      */
-   
     private $mail;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="users", orphanRemoval=true)
+     */
+    private $posts;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -82,12 +92,12 @@ class Users implements UserInterface
 
     public function getDateInscription(): ?\DateTimeInterface
     {
-        return $this->DateInscription;
+        return $this->date_inscription;
     }
 
-    public function setDateInscription(\DateTimeInterface $DateInscription): self
+    public function setDateInscription(\DateTimeInterface $date_inscription): self
     {
-        $this->DateInscription = $DateInscription;
+        $this->date_inscription = $date_inscription;
 
         return $this;
     }
@@ -120,4 +130,41 @@ class Users implements UserInterface
     {
         return ['ROLE_USER'];
     }
+    public function __toString() {
+        return $this->getUsername();
+      }
+    
+    
+    /**
+     * @return Collection|Post[]
+     */
+
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->contains($post)) {
+            $this->posts->removeElement($post);
+            // set the owning side to null (unless already changed)
+            if ($post->getUsers() === $this) {
+                $post->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+    
 }

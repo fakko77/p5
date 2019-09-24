@@ -5,19 +5,20 @@
 
 <article>
     <h2>{{ post.titre }}</h2>
-    <div class="metadata">date {{ post.DatePost | date('d/m/y') }} à {{post.DatePost | date('h:i') }} dans la catégorie {{post.category.title }}</div>
+    <div class="metadata">date {{ post.DatePost | date('d/m/y') }} à {{post.DatePost | date('h:i') }} dans la catégorie {{post.category.title }}  par <mark> {{ post.userCreator }} </mark> </div>
     <div class="content">
         <img src="http://placehold.it/350x150" alt="">
         <p>Pariatur possimus hic maiores officia, placeat facere tempore suscipit. Nisi dicta magnam voluptatem eveniet dolorum.</p>
         <p>Repellendus nesciunt aperiam assumenda voluptate quis nihil et voluptates, quia dolore eum explicabo deserunt tempore?</p>
         <hr>
         
-<p>{{ post.content }}</p>
+<p>{{ post.content | raw   }}</p>
 <p>Debitis reprehenderit nulla tempore, laboriosam recusandae neque aspernatur nostrum suscipit expedita? Obcaecati, nemo? Debitis ullam quos at aliquid non sequi distinctio dolor sunt hic pariatur accusamus quia quo, ducimus aperiam cumque porro illo ratione commodi facere ipsum voluptatem. Omnis laudantium veritatis modi eius dignissimos eligendi ipsam aut nisi, maiores voluptatem!</p>
     </div>
 </article>
 
 <section id="commentaires">
+<h1>{{post.comments | length }} Commentaires</h1>
 {% for comment in post.comments %}
     <div class="commentaire">
         <div class="row">
@@ -31,6 +32,13 @@
 
     </div>
    {% endfor %}
+       {% if  app.user %}
+   {{ form_start(commentForm) }}
+   <h4>Author:   {{app.user.username}}</h4>
+   {{form_row(commentForm.content, {'attr': {'placeholder':"votre commentaire"}})}}
+   <button type="submit" class="btn btn-success">send </button>
+   {{ form_end(commentForm) }}
+ {% endif %}
 </section>
 
 {% endblock %} 

@@ -49,6 +49,12 @@ class Post
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $users;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -146,6 +152,18 @@ class Post
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUsers(): ?Users
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?Users $users): self
+    {
+        $this->users = $users;
 
         return $this;
     }

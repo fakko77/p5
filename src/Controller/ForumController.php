@@ -5,6 +5,9 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Post;
+use App\Entity\Users;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Entity\Category;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
@@ -12,7 +15,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType ;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 
 class ForumController extends AbstractController
@@ -46,6 +49,10 @@ class ForumController extends AbstractController
      */
 
     public function create(Request $request , ObjectManager $manager ){
+
+        $username = $this->getUser();
+      
+
        $auth =  $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if($auth == true ){
 
@@ -72,7 +79,10 @@ class ForumController extends AbstractController
                         {
               
                           $post->setDatePost(new \DateTime());
-                        $post->setUserCreator("avoir avec mentor");
+                        $post->setUserCreator($username);
+                     $post->setUsers($username);
+                       
+                      
                         
                         
                          $manager->persist($post);
@@ -89,12 +99,28 @@ class ForumController extends AbstractController
     /**
      * @Route("/forum/{id}", name="forum_show")
      */
-    public function show($id){
-
+    public function show($id, Request $request, ObjectManager $manager){
+        $username = $this->getUser()->getUsername();
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
         $repo = $this->getDoctrine()->getRepository(Post::class);
         $post = $repo->find($id);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $comment->setCreatedAt(new \DateTime())
+                    ->setArticle($post)
+                    ->setAuthor($username);
+            $manager->persist($comment);
+            $manager->flush();
+
+            return $this->redirectToRoute('forum_show', ['id'=> $post->getId()]);
+
+
+        }
         return $this->render('forum/show.html.twig',
-    ['post'=> $post]);
+    ['post'=> $post,
+        'commentForm' => $form->createView()
+    ]);
 
     }
 
