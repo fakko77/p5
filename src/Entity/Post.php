@@ -16,17 +16,25 @@ class Post
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+   private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $titre;
+    private $titre; 
 
     /**
      * @ORM\Column(type="text")
      */
     private $content;
+
+   
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $valid;
+
 
     /**
      * @ORM\Column(type="datetime")
@@ -55,9 +63,12 @@ class Post
      */
     private $users;
 
+ 
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -76,6 +87,24 @@ class Post
 
         return $this;
     }
+    
+    
+
+
+    public function getValid(): ?string
+    {
+        return $this->valid;
+    }
+
+    public function setValid(string $valid): self
+    {
+        $this->valid = $valid;
+
+        return $this;
+    }
+
+
+
 
     public function getContent(): ?string
     {
@@ -167,4 +196,5 @@ class Post
 
         return $this;
     }
+
 }

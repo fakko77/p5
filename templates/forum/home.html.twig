@@ -1,17 +1,37 @@
 {% extends 'base.html.twig' %}
 
 
- {% block body %}
-<h1>Bienvenue sur le forum du codeur </h1>
+{% block body %}
+    <h1>Bienvenue sur le forum du codeur
+    </h1>
+    <img src="{{asset('/bundles/img/logo.png')}}" class="logo" title="my image" alt="My image"><p></p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scrupulum, inquam, abeunti; Quae diligentissime contra Aristonem dicuntur a Chryippo. Quippe: habes enim a rhetoribus; An eiusdem modi? An hoc usque quaque, aliter in vita? Duo Reges: constructio interrete.
+    </p>
+
+    <ol>
+        <li>Quamquam in hac divisione rem ipsam prorsus probo, elegantiam desidero.</li>
+        <li>Tu enim ista lenius, hic Stoicorum more nos vexat.</li>
+        <li>Idcirco enim non desideraret, quia, quod dolore caret, id in voluptate est.</li>
+        <li>Sic exclusis sententiis reliquorum cum praeterea nulla esse possit, haec antiquorum valeat necesse est.</li>
+        <li>Restinguet citius, si ardentem acceperit.</li>
+    </ol>
 
 
- 
-<p> zrgggyyyyyyyyyy</p>
- 
- {% endblock %}
+    <blockquote cite="http://loripsum.net">
+        Quid tibi, Torquate, quid huic Triario litterae, quid historiae cognitioque rerum, quid poetarum evolutio, quid tanta tot versuum memoria voluptatis affert?
+    </blockquote>
 
 
+    <pre>Alia quaedam dicent, credo, magna antiquorum esse peccata,
+quae ille veri investigandi cupidus nullo modo ferre
+potuerit.
+
+Quod enim ne vivus quidem, inquit, diutius sentire poterat,
+quam dum fruebatur, quo modo id potuit mortuo permanere?
+</pre>
 
 
+    <a class="nav-link" href="{{ path('jsonAffichage')}}" title="Déconnexion">hh</p>
 
 
+{% endblock %}

@@ -1,23 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ForumController!{% endblock %}
+{% block title %}FORUM DU CODEUR!{% endblock %}
 
 {% block body %}
+{{form_start(filtre)}}
+{{form_row(filtre.category | raw , {'attr': {'class': 'class-filtre'}} ) }}
+<button type="sumbit" class="btn btn-success">Filtrer! </button>
+{{form_end(filtre)}}
 
 <section class="article">
-
+<br> 
 {% for post in posts %}
-
-
 <article>
+<section>
+<div id="{{post.category.title}}">
     <h2>{{  post.titre }}</h2>
-    <div class="metadata">  </div>
+    <div class="metadata"> Categorie: {{post.category.title}} </div>
     <div class="content">
        
         {{ post.content | raw }}
         <br>
-        <a href="{{ path('forum_show',{'id': post.id})}}" class="btn btn-primary">Accéder au forum</a>
+        <a href="{{ path('forum_show',{'id': post.id})}}" class="btn btn-primary">  Accéder au forum</a>
     </div>
+</div>    
+    <br>
+  <section>
+  <hr>
 {% endfor %}
 </article>
 

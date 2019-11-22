@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1>{{user.username}}
+    </h1>
+    {% set current_path = app.request.get('_route') %}
+
+    {{val}}
+    <p>
+        Date d'inscription :
+        {{user.getDateInscription | date('d/m/y')}}
+    </p>
+    <a href="{{ path('compte_modification', {'user': user.id})}}">
+        Modifier mon email / mot de passe!
+    </a>
+    <p>
+        Nombre de posts posté:
+        {{user.getPosts | length }}
+    </p>
+    <button type="button" class="btn btn-outline-secondary" onclick="Aff()" ;>
+        afficher!</button>
+    <table class="table table-hover" id="table" style="display:none;">
+        <thead>
+            <tr>
+                <th scope="col">Titre du post</th>
+                <th scope="col">Createur du post</th>
+                <th scope="col">Categorie</th>
+                <th scope="col">date</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+                <tr>
+                    <th scope="row">{{  post.titre }}</th>
+                    <td>{{  post.userCreator }}</td>
+                    <td>{{  post.category.title }}</td>
+                    <td>{{ post.DatePost | date('d/m/y') }}</td>
+                    <td>
+                        <a href="{{ path('forum_show',{'id': post.id})}}" class="btn btn-primary">
+                            Accéder au forum</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('delete_post', {'id': post.id } ) }}">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    <br>
+                </tr>
+            </tbody>
+        {% endfor %}
+
+        <p>Nombre de commentaires:
+            {{user.getComments | length }}
+        </p>
+
+        <button type="button" class="btn btn-outline-secondary" onclick="Aff2()" ;>
+            afficher!</button>
+        <table class="table table-hover" id="table2" style="display:none;">
+            <thead>
+                <tr>
+                    <th scope="col">article title</th>
+                    <th scope="col">contenu</th>
+                    <th scope="col">date</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td>{{  comment.article.titre}}</td>
+                        <td>{{  comment.content}}</td>
+                        <td>{{ comment.createdAt | date('d/m/y') }}</td>
+                        <td>
+                            <a href="{{ path('delete_com', {'id': comment.id ,'route': current_path }) }}">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                        <br>
+                    </tr>
+                </tbody>
+            {% endfor %}
+
+        {% endblock %}

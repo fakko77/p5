@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+
+ {% block body %}
+<h1>SECTION  ADMIN</h1>
+
+<br>
+<h3> Nombre de Post à verifier : {{posts | length }} </h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Titre du post</th>
+      <th scope="col">Createur du post</th>
+      <th scope="col">Categorie</th>
+      <th scope="col">date</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+ {% for post in posts %}
+
+
+
+
+    <tr>
+      <th scope="row">{{  post.titre }}</th>
+      <td>{{  post.userCreator }}</td>
+      <td>{{  post.category.title }}</td>
+      <td>{{ post.DatePost | date('d/m/y') }}</td>
+      <td><a href="{{ path('forum_show',{'id': post.id})}}" class="btn btn-primary">  Accéder au forum</a></td>
+    </tr>
+  </tbody>
+
+
+   
+{% endfor %}
+</table>
+
+ 
+ {% endblock %}
+
+
+
+
+
+

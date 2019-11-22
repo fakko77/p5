@@ -18,8 +18,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * )
  * @UniqueEntity(
  * fields = {"username"},
- * message = "le username est deja utilisé"
+ * message = "l'username est deja utilisé"
  * )
+ * 
  */
 class Users implements UserInterface
 {
@@ -47,7 +48,8 @@ class Users implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Email()
+     * @Assert\Email(strict=true, message="Le format de l'email est incorrect")
+     * @Assert\Email(checkMX=true, message="Aucun serveur mail n'a été trouvé pour ce domaine")
      */
     private $mail;
 
@@ -56,9 +58,21 @@ class Users implements UserInterface
      */
     private $posts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $role;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,22 +133,19 @@ class Users implements UserInterface
     }
 
     public function eraseCredentials()
-    {
-        
-    }
+    { }
     public function getSalt()
-    {
-        
-    }
+    { }
     public function getRoles()
     {
         return ['ROLE_USER'];
     }
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getUsername();
-      }
-    
-    
+    }
+
+
     /**
      * @return Collection|Post[]
      */
@@ -166,5 +177,47 @@ class Users implements UserInterface
 
         return $this;
     }
-    
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
 }

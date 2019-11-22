@@ -1,44 +1,91 @@
-{% extends 'base.html.twig' %} 
+{% extends 'base.html.twig' %}
 
-
+{% set current_path = app.request.get('_route') %}
 {% block body %}
+    <script src="{{ asset('bundles/javascript/ajax.js') }}"></script>
 
-<article>
-    <h2>{{ post.titre }}</h2>
-    <div class="metadata">date {{ post.DatePost | date('d/m/y') }} à {{post.DatePost | date('h:i') }} dans la catégorie {{post.category.title }}  par <mark> {{ post.userCreator }} </mark> </div>
-    <div class="content">
-        <img src="http://placehold.it/350x150" alt="">
-        <p>Pariatur possimus hic maiores officia, placeat facere tempore suscipit. Nisi dicta magnam voluptatem eveniet dolorum.</p>
-        <p>Repellendus nesciunt aperiam assumenda voluptate quis nihil et voluptates, quia dolore eum explicabo deserunt tempore?</p>
-        <hr>
-        
-<p>{{ post.content | raw   }}</p>
-<p>Debitis reprehenderit nulla tempore, laboriosam recusandae neque aspernatur nostrum suscipit expedita? Obcaecati, nemo? Debitis ullam quos at aliquid non sequi distinctio dolor sunt hic pariatur accusamus quia quo, ducimus aperiam cumque porro illo ratione commodi facere ipsum voluptatem. Omnis laudantium veritatis modi eius dignissimos eligendi ipsam aut nisi, maiores voluptatem!</p>
-    </div>
-</article>
-
-<section id="commentaires">
-<h1>{{post.comments | length }} Commentaires</h1>
-{% for comment in post.comments %}
-    <div class="commentaire">
-        <div class="row">
-            <div class="col-3">
-            {{comment.author}} (<small> {{comment.createdAt | date('d/m/y')}}  </small>)
-            </div>
-            <div class="col">
-            {{comment.content | raw  }}
-            </div>
+    <div class="row">
+        <div class="col-md-7 js-rep-log-table">
+            <table class="table table-striped"></table>
         </div>
-
     </div>
-   {% endfor %}
-       {% if  app.user %}
-   {{ form_start(commentForm) }}
-   <h4>Author:   {{app.user.username}}</h4>
-   {{form_row(commentForm.content, {'attr': {'placeholder':"votre commentaire"}})}}
-   <button type="submit" class="btn btn-success">send </button>
-   {{ form_end(commentForm) }}
- {% endif %}
-</section>
 
-{% endblock %} 
+    <article>
+        <h2>{{ post.titre }}</h2>
+        <div class="metadata">date
+            {{ post.DatePost | date('d/m/y') }}
+            à
+            {{post.DatePost | date('h:i') }}
+            dans la catégorie
+            {{post.category.title }}
+            par
+            <mark>
+                {{ post.userCreator }}
+            </mark>
+        </div>
+        <div class="content">
+            <hr style="background-color:white;">
+
+            <p>{{ post.content | raw   }}</p>
+
+        </div>
+    </article>
+
+    <section id="commentaires">
+        <h1>{{post.comments | length }}
+            Commentaires</h1>
+        {% for comment in post.comments %}
+            <div class="commentaire">
+                <div class="row">
+                    <div class="col-3">
+                        {{comment.author}}
+                        (<small>
+                            {{comment.createdAt | date('d/m/y')}}
+                        </small>)
+                    </div>
+                    <div class="col">
+                        {{comment.content | raw  }}
+                    </div>
+                    {% if app.user != null %}
+                        {% if app.user.username == comment.author or  app.user.role.titre == "admin" %}
+                            <div class="col">
+                                <a href="{{ path('delete_com', {'id': comment.id ,'route':current_path , 'articleid': post.id}) }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+            </div>
+        {% endfor %}
+        {% if  app.user %}
+            {% if app.user.username == post.userCreator  %}
+                <a href="{{ path('forum_edit',{'id': post.id})}}" class="btn btn-primary">
+                    Modifier</a>
+                <a href="{{ path('delete_post', {'id': post.id}) }}" class="btn btn-warning">Supprimer
+                </a>
+            {% endif %}
+            {% if app.user.role.titre == "admin" and  app.user.username != post.userCreator %}
+                <a href="{{ path('delete_post', {'id': post.id }) }}" class="btn btn-warning">Supprimer</a>
+            {% endif %}
+            {% if post.valid == "non" %}
+                <a href="{{ path('valid', {'id': post.id}) }}" class="btn btn-secondary">Valider!</a>
+            {% endif %}
+
+            <div id="test">
+                {{ form_start(commentForm)}}
+
+                <h4>Author:
+                    {{app.user.username}}</h4>
+                {{form_row(commentForm.content, {'attr': {'placeholder':"votre commentaire"}})}}
+                <button type="submit" class="btn btn-success">Envoyer!
+                </button>
+                {{ form_end(commentForm) }}
+            </div>
+        {% endif %}
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}{% endblock %}

@@ -2,18 +2,19 @@
 
 {% form_theme formUser 'bootstrap_4_layout.html.twig' %}
 
- {% block body %}
- 
- {{form_start(formUser)}}
+{% block body %}
+{% set current_path = app.request.get('_route') %}
+{{form_start(formUser)}}
 
 {{ form_row(formUser.username , {'attr' : {'placeholder':"Username"}} )}}
+
 {{ form_row(formUser.mail , {'attr' : {'placeholder':"Email"}} )}}
 {{ form_row(formUser.pwd.first, { 'attr' : {'placeholder':"Mot de passe"}} )}}
 {{ form_row(formUser.pwd.second, { 'attr' : {'placeholder':"Mot de passe confirmation"}} )}}
-
-<button type="sumbit" class="btn btn-success">Inscription </button>
-
- {{form_end(formUser)}}
- {% endblock %}
-
-
+{% if current_path == "forum_registration" %}
+<button type="sumbit" class="btn btn-success">Inscription! </button>
+{% else %}
+<button type="sumbit" class="btn btn-success">Modifier! </button>
+{% endif %}
+{{form_end(formUser)}}
+{% endblock %}

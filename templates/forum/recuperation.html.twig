@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FORUM DU CODEUR!
+{% endblock %}
+
+
+{% block body %}
+    {{form_start(formUser)}}
+    {{ form_row(formUser.email , {'attr' : {'placeholder':"Votre mail"}, 'id':"input_mail"}
+    )}}
+    <p id="res"></p>
+
+    <button type="sumbit" id="sumbit" onclick="c()" class="btn btn-success">Envoyer!
+
+
+    </button>
+
+    {{form_end(formUser)}}
+
+
+{% endblock %}
+{% block javascript %}
+    <script></script>
+
+{% endblock %}
